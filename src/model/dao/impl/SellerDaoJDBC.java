@@ -47,22 +47,22 @@ public class SellerDaoJDBC implements SellerDao{
 			if (linhas > 0) {
 				ResultSet rs = st.getGeneratedKeys();
 				
-			if (rs.next()) {
-				int id = rs.getInt(1);
-				obj.setId(id);
+				if (rs.next()) {
+					int id = rs.getInt(1);
+					obj.setId(id);
+				}
+				DB.closeResultSet(rs);
+				}
+				else {
+					throw new DbException("Nenhuma linha afetada");
+				}
 			}
-			DB.closeResultSet(rs);
+			catch(SQLException e) {
+				throw new DbException(e.getMessage());
 			}
-			else {
-				throw new DbException("Nenhuma linha afetada");
+			finally{
+				DB.closeStatement(st);
 			}
-		}
-		catch(SQLException e) {
-			throw new DbException(e.getMessage());
-		}
-		finally{
-			DB.closeStatement(st);
-		}
 	}
 
 	@Override
